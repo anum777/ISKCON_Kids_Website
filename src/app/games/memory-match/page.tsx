@@ -34,7 +34,7 @@ export default function MemoryMatchPage() {
 
   useEffect(() => {
     if (flippedCards.length === 2) {
-      setMoves(moves + 1);
+      setMoves(prevMoves => prevMoves + 1);
       const [firstCardIndex, secondCardIndex] = flippedCards;
       const firstCard = cards[firstCardIndex];
       const secondCard = cards[secondCardIndex];
@@ -46,7 +46,7 @@ export default function MemoryMatchPage() {
             card.name === firstCard.name ? { ...card, isMatched: true } : card
           )
         );
-        setMatchedPairs(matchedPairs + 1);
+        setMatchedPairs(prev => prev + 1);
         setFlippedCards([]);
       } else {
         // No match
@@ -62,22 +62,22 @@ export default function MemoryMatchPage() {
         }, 1000);
       }
     }
-  }, [flippedCards, cards, matchedPairs, moves]);
+  }, [flippedCards, cards]);
 
   useEffect(() => {
-    if (matchedPairs === icons.length) {
+    if (icons.length > 0 && matchedPairs === icons.length) {
       setIsGameWon(true);
     }
   }, [matchedPairs]);
 
   const handleCardClick = (index: number) => {
-    if (flippedCards.length < 2 && !cards[index].isFlipped) {
+    if (flippedCards.length < 2 && !cards[index].isFlipped && !cards[index].isMatched) {
       setCards(prevCards =>
         prevCards.map((card, i) =>
           i === index ? { ...card, isFlipped: true } : card
         )
       );
-      setFlippedCards([...flippedCards, index]);
+      setFlippedCards(prev => [...prev, index]);
     }
   };
 
