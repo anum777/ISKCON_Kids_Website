@@ -59,6 +59,42 @@
       "description": "A peacock feather with vibrant colors.",
       "imageUrl": "https://images.unsplash.com/photo-1606299770622-d569b5464732?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZWFjb2NrJTIwZmVhdGhlcnxlbnwwfHx8fDE3NjE3MjI1NzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "peacock feather"
+    },
+    {
+      "id": "contact-hero",
+      "description": "An old-fashioned telephone on a desk.",
+      "imageUrl": "https://images.unsplash.com/photo-1512125098323-cce1035bf4bf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx2aW50YWdlJTIwdGVsZXBob25lfGVufDB8fHx8MTc2MTcwODA3NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "vintage telephone"
+    },
+    {
+      "id": "story-detail-1",
+      "description": "A pot of butter.",
+      "imageUrl": "https://images.unsplash.com/photo-1590147315472-e701a4775379?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXR0ZXIlMjBwb3R8ZW58MHx8fHwxNzYxNzU2MzAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "butter pot"
+    },
+    {
+      "id": "story-detail-2",
+      "description": "A large green hill under a blue sky.",
+      "imageUrl": "https://images.unsplash.com/photo-1592205644721-2fe5214762ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxncmVlbiUyMGhpbGx8ZW58MHx8fHwxNzYxNjUxMDI0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "green hill"
+    },
+    {
+      "id": "story-detail-3",
+      "description": "Animated scene of a forest.",
+      "imageUrl": "https://images.unsplash.com/photo-1648213754856-b04eca726307?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmb3Jlc3QlMjBhbmltYXRpb258ZW58MHx8fHwxNzYxNzU2MzAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "forest animation"
+    },
+    {
+      "id": "event-detail-1",
+      "description": "A colorful festival celebration.",
+      "imageUrl": "https://images.unsplash.com/photo-1761503390713-a1fd8b8bb6c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmZXN0aXZhbCUyMGNlbGVicmF0aW9ufGVufDB8fHx8MTc2MTc1NDYyNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "festival celebration"
+    },
+    {
+      "id": "event-detail-2",
+      "description": "Children sitting in a circle for a workshop.",
+      "imageUrl": "https://images.unsplash.com/photo-1544772711-57da9c7368fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxraWRzJTIwd29ya3Nob3B8ZW58MHx8fHwxNzYxNzU2MzAyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "kids workshop"
     }
   ]
 }
