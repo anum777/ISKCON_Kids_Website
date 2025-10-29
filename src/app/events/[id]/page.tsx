@@ -7,7 +7,21 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Calendar, Clock, MapPin, User } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { use } from 'react';
+import { use, useState } from 'react';
+import { useUser, useFirestore, setDocumentNonBlocking } from '@/firebase';
+import { doc } from 'firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { useRouter } from 'next/navigation';
 
 const events = {
   '1': {
@@ -60,7 +74,39 @@ type EventParams = {
 };
 
 export default function EventDetailPage({ params }: EventParams) {
-  const event = events[use(params).id];
+  const eventId = use(params).id;
+  const event = events[eventId];
+  const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+  const { toast } = useToast();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const router = useRouter();
+
+
+  const handleRegister = () => {
+    if (!user) {
+      setIsAlertOpen(true);
+      return;
+    }
+
+    const registrationRef = doc(firestore, 'eventRegistrations', eventId, 'participants', user.uid);
+    const registrationData = {
+      eventId: eventId,
+      userId: user.uid,
+      childName: user.displayName || 'N/A', 
+      parentName: 'N/A', 
+      email: user.email,
+      registeredAt: new Date().toISOString(),
+      attended: false,
+    };
+    
+    setDocumentNonBlocking(registrationRef, registrationData, { merge: true });
+
+    toast({
+      title: 'Registration Successful!',
+      description: `You are now registered for ${event.title}.`,
+    });
+  };
 
   if (!event) {
     return (
@@ -132,12 +178,28 @@ export default function EventDetailPage({ params }: EventParams) {
                                 </li>
                             ))}
                         </ul>
-                         <Button size="lg" className="w-full mt-8">Register Now</Button>
+                         <Button size="lg" className="w-full mt-8" onClick={handleRegister} disabled={isUserLoading}>
+                           {isUserLoading ? 'Loading...' : 'Register Now'}
+                         </Button>
                     </div>
                 </div>
             </div>
         </div>
       </div>
+      <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Please Login to Register</AlertDialogTitle>
+            <AlertDialogDescription>
+              You need to be logged in to register for events. Please log in or create an account to continue.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => router.push('/login')}>Login</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

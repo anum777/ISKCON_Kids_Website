@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -15,9 +16,33 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { LotusIcon } from '@/components/icons';
+import { useAuth, initiateEmailSignIn } from '@/firebase';
+import { useState, useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { useUser } from '@/firebase';
 
 export default function LoginPage() {
   const loginArt = PlaceHolderImages.find((img) => img.id === 'login-art');
+  const auth = useAuth();
+  const { user } = useUser();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user, router]);
+
+  const handleLogin = () => {
+    initiateEmailSignIn(auth, email, password);
+    toast({
+      title: 'Logging in...',
+      description: 'You will be redirected shortly.',
+    });
+  };
 
   return (
     <div className="w-full lg:grid lg:min-h-[calc(100vh-4rem)] lg:grid-cols-2 xl:min-h-[calc(100vh-4rem)]">
@@ -41,6 +66,8 @@ export default function LoginPage() {
                   type="email"
                   placeholder="m@example.com"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -53,11 +80,11 @@ export default function LoginPage() {
                     Forgot your password?
                   </Link>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
-              <Button className="w-full">Login</Button>
+              <Button className="w-full" onClick={handleLogin}>Login</Button>
             </CardFooter>
           </Card>
           <div className="mt-4 text-center text-sm">

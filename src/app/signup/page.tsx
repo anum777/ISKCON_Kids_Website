@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,9 +15,51 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { PeacockFeatherIcon } from '@/components/icons';
+import { useAuth, initiateEmailSignUp, setDocumentNonBlocking } from '@/firebase';
+import { doc } from 'firebase/firestore';
+import { useFirestore, useUser } from '@/firebase';
+import { useState, useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function SignupPage() {
   const signupArt = PlaceHolderImages.find((img) => img.id === 'signup-art');
+  const auth = useAuth();
+  const firestore = useFirestore();
+  const { user } = useUser();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const [childName, setChildName] = useState('');
+  const [age, setAge] = useState('');
+  const [parentName, setParentName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      const userRef = doc(firestore, 'users', user.uid);
+      const userData = {
+        id: user.uid,
+        childName,
+        age: Number(age),
+        parentName,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        createdAt: new Date().toISOString(),
+        profileImage: user.photoURL || '',
+      };
+      setDocumentNonBlocking(userRef, userData, { merge: true });
+      router.push('/');
+    }
+  }, [user, router, firestore, childName, age, parentName]);
+
+  const handleSignUp = () => {
+    initiateEmailSignUp(auth, email, password);
+    toast({
+        title: 'Account created!',
+        description: 'Welcome! You are now being logged in.',
+    });
+  };
 
   return (
     <div className="w-full lg:grid lg:min-h-[calc(100vh-4rem)] lg:grid-cols-2">
@@ -36,16 +79,16 @@ export default function SignupPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="child-name">Child&apos;s Name</Label>
-                  <Input id="child-name" placeholder="Arjuna" required />
+                  <Input id="child-name" placeholder="Arjuna" required value={childName} onChange={(e) => setChildName(e.target.value)} />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="age">Age</Label>
-                  <Input id="age" type="number" placeholder="8" required />
+                  <Input id="age" type="number" placeholder="8" required value={age} onChange={(e) => setAge(e.target.value)} />
                 </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="parent-name">Parent&apos;s Name</Label>
-                <Input id="parent-name" placeholder="Yashoda" required />
+                <Input id="parent-name" placeholder="Yashoda" required value={parentName} onChange={(e) => setParentName(e.target.value)} />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -54,13 +97,15 @@ export default function SignupPage() {
                   type="email"
                   placeholder="m@example.com"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" />
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
-              <Button type="submit" className="w-full mt-4">
+              <Button type="submit" className="w-full mt-4" onClick={handleSignUp}>
                 Create an account
               </Button>
             </div>
