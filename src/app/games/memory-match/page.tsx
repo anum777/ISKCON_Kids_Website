@@ -1,15 +1,16 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Flute, Lotus, PeacockFeatherIcon } from '@/components/icons';
+import { FluteIcon, LotusIcon, PeacockFeatherIcon } from '@/components/icons';
 import { Heart, Star, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const icons = [
-  { icon: Flute, name: 'Flute' },
-  { icon: Lotus, name: 'Lotus' },
+  { icon: FluteIcon, name: 'Flute' },
+  { icon: LotusIcon, name: 'Lotus' },
   { icon: PeacockFeatherIcon, name: 'PeacockFeather' },
   { icon: Heart, name: 'Heart' },
   { icon: Star, name: 'Star' },
