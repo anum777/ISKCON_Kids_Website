@@ -1,3 +1,64 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "An illustration of a young Krishna playing a flute.",
+      "imageUrl": "https://images.unsplash.com/photo-1713986719575-e59f3e954737?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhbmltYXRlZCUyMEtyaXNobmF8ZW58MHx8fHwxNzYxNzU1ODYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "animated Krishna"
+    },
+    {
+      "id": "carousel1",
+      "description": "Illustration of Krishna eating butter.",
+      "imageUrl": "https://images.unsplash.com/photo-1715627156584-30de8752290f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxLcmlzaG5hJTIwYnV0dGVyfGVufDB8fHx8MTc2MTc1NTg2MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Krishna butter"
+    },
+    {
+      "id": "carousel2",
+      "description": "Illustration of Krishna lifting Govardhan Hill.",
+      "imageUrl": "https://images.unsplash.com/photo-1684920332869-49b11a6e8eb9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8S3Jpc2huYSUyMG1vdW50YWlufGVufDB8fHx8MTc2MTc1NTg2MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Krishna mountain"
+    },
+    {
+      "id": "carousel3",
+      "description": "Children celebrating Janmashtami festival.",
+      "imageUrl": "https://images.unsplash.com/photo-1605292356183-a77d0a9c9d1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxJbmRpYW4lMjBmZXN0aXZhbHxlbnwwfHx8fDE3NjE2NDk0NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Indian festival"
+    },
+    {
+      "id": "tile1",
+      "description": "An ancient Indian scroll with stories.",
+      "imageUrl": "https://images.unsplash.com/photo-1651534387282-0b3c2cece441?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhbmNpZW50JTIwc2Nyb2xsfGVufDB8fHx8MTc2MTY2MjUwMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ancient scroll"
+    },
+    {
+      "id": "tile2",
+      "description": "Colorful decorations for an Indian festival.",
+      "imageUrl": "https://images.unsplash.com/photo-1673700910525-3fe02f76f294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmZXN0aXZhbCUyMGRlY29yYXRpb25zfGVufDB8fHx8MTc2MTc1NTg2MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "festival decorations"
+    },
+    {
+      "id": "tile3",
+      "description": "A traditional Indian board game.",
+      "imageUrl": "https://images.unsplash.com/photo-1547638375-ebf04735d792?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxib2FyZCUyMGdhbWV8ZW58MHx8fHwxNzYxNzI5NTc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "board game"
+    },
+    {
+      "id": "tile4",
+      "description": "A person meditating in a serene setting.",
+      "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtZWRpdGF0aW9uJTIwbmF0dXJlfGVufDB8fHx8MTc2MTczMjQ0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "meditation nature"
+    },
+    {
+      "id": "login-art",
+      "description": "A beautiful lotus flower.",
+      "imageUrl": "https://images.unsplash.com/photo-1534162802244-d6f69e9048da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsb3R1cyUyMGZsb3dlcnxlbnwwfHx8fDE3NjE3NTU4NjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "lotus flower"
+    },
+    {
+      "id": "signup-art",
+      "description": "A peacock feather with vibrant colors.",
+      "imageUrl": "https://images.unsplash.com/photo-1606299770622-d569b5464732?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZWFjb2NrJTIwZmVhdGhlcnxlbnwwfHx8fDE3NjE3MjI1NzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "peacock feather"
+    }
+  ]
 }
