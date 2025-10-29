@@ -8,7 +8,7 @@ const games = [
         icon: <Lightbulb className="h-10 w-10 text-primary" />,
         title: 'Krishna Quiz',
         description: 'Test your knowledge about Krishna\'s life and teachings.',
-        href: '#',
+        href: '/games/krishna-quiz',
     },
      {
         icon: <Palette className="h-10 w-10 text-primary" />,

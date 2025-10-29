@@ -1,5 +1,9 @@
+'use client';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { BookText, PlayCircle } from 'lucide-react';
+import { BookText, PlayCircle, Loader2, StopCircle } from 'lucide-react';
+import { useState } from 'react';
+import { textToSpeech } from '@/ai/flows/text-to-speech';
+import { useToast } from '@/hooks/use-toast';
 
 const shlokas = [
   {
@@ -16,7 +20,77 @@ const shlokas = [
   },
 ];
 
+type AudioState = {
+  [key: string]: {
+    isLoading: boolean;
+    audioUrl: string | null;
+    isPlaying: boolean;
+  };
+};
+
 export default function ShlokasPage() {
+  const [audioState, setAudioState] = useState<AudioState>({});
+  const { toast } = useToast();
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+
+  const handlePlayAudio = async (title: string, text: string) => {
+    if (audioElement) {
+      audioElement.pause();
+      const newAudioState: AudioState = {};
+      Object.keys(audioState).forEach(key => {
+          newAudioState[key] = { ...audioState[key], isPlaying: false };
+      });
+      setAudioState(newAudioState);
+    }
+    
+    if (audioState[title]?.audioUrl) {
+      const audio = new Audio(audioState[title].audioUrl!);
+      setAudioElement(audio);
+      audio.play();
+      setAudioState(prev => ({ ...prev, [title]: { ...prev[title], isPlaying: true } }));
+      audio.onended = () => {
+          setAudioState(prev => ({ ...prev, [title]: { ...prev[title], isPlaying: false } }));
+      };
+      return;
+    }
+
+    setAudioState(prev => ({ ...prev, [title]: { isLoading: true, audioUrl: null, isPlaying: false } }));
+    try {
+      const response = await textToSpeech(text);
+      const audio = new Audio(response.media);
+      setAudioElement(audio);
+      audio.play();
+      setAudioState(prev => ({
+        ...prev,
+        [title]: { isLoading: false, audioUrl: response.media, isPlaying: true },
+      }));
+       audio.onended = () => {
+          setAudioState(prev => ({ ...prev, [title]: { ...prev[title], isPlaying: false } }));
+      };
+    } catch (error) {
+      console.error('Error generating speech:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to generate audio. Please try again.',
+      });
+      setAudioState(prev => ({ ...prev, [title]: { ...prev[title], isLoading: false } }));
+    }
+  };
+  
+  const handleStopAudio = () => {
+    if (audioElement) {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+      const newAudioState: AudioState = {};
+      Object.keys(audioState).forEach(key => {
+          newAudioState[key] = { ...audioState[key], isPlaying: false };
+      });
+      setAudioState(newAudioState);
+      setAudioElement(null);
+    }
+  };
+
   return (
     <div className="container mx-auto py-12">
       <div className="text-center mb-12">
@@ -35,7 +109,13 @@ export default function ShlokasPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>{shloka.chapterVerse}</CardTitle>
-                 <PlayCircle className="h-8 w-8 text-primary cursor-pointer hover:text-primary/80" />
+                 {audioState[shloka.chapterVerse]?.isLoading ? (
+                    <Loader2 className="h-8 w-8 text-primary animate-spin" />
+                ) : audioState[shloka.chapterVerse]?.isPlaying ? (
+                    <StopCircle className="h-8 w-8 text-primary cursor-pointer hover:text-primary/80" onClick={handleStopAudio} />
+                ) : (
+                    <PlayCircle className="h-8 w-8 text-primary cursor-pointer hover:text-primary/80" onClick={() => handlePlayAudio(shloka.chapterVerse, shloka.sanskrit)} />
+                )}
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
