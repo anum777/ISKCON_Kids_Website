@@ -1,0 +1,311 @@
+/**
+ * @fileoverview Firestore Security Rules for Krishna Kids Zone.
+ *
+ * Core Philosophy:
+ * This ruleset enforces a user-ownership model for personal data and allows open read access to public content.
+ * Administrative privileges are granted based on the existence of an admin profile.
+ *
+ * Data Structure:
+ * - User profiles: /users/{userId}
+ * - Krishna stories: /stories/{storyId} (public read)
+ * - User story progress: /users/{userId}/storyProgress/{storyId}
+ * - Events: /events/{eventId} (public read)
+ * - Event registrations: /eventRegistrations/{eventId}/participants/{userId}
+ * - Games: /games/{gameId} (public read)
+ * - User game scores: /users/{userId}/gameScores/{gameId}
+ * - Leaderboard entries: /leaderboard/{gameId}/entries/{userId}
+ * - Learning content: /learningContent/{contentId} (public read)
+ * - User learning progress: /users/{userId}/learningProgress/{contentId}
+ * - Galleries: /galleries/{galleryId} (public read)
+ * - Photos: /photos/{photoId}
+ * - Contact form submissions: /contacts/{contactId} (admin only)
+ * - Class registrations: /classRegistrations/{registrationId} (admin only)
+ * - Admin profiles: /admins/{adminId}
+ *
+ * Key Security Decisions:
+ * - Public read access for stories, events, learning content, and galleries.
+ * - Strict user-ownership for user profiles, story progress, game scores, and learning progress.
+ * - Admin access to contact form submissions and class registrations.
+ * - User can only create their own user document if the userId matches their auth.uid.
+ *
+ * Denormalization for Authorization:
+ * - Event registrations include denormalized user data (childName, parentName, email) for authorization independence.
+ *
+ * Structural Segregation:
+ * - Public content (stories, events, learning content, galleries) is stored in root-level collections.
+ * - User-specific data is stored in subcollections under /users/{userId}.
+ * - Admin-specific data is stored in the /admins collection.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Grants access to user profiles.
+     * @path /users/{userId}
+     * @allow (create) User with matching userId can create their profile.
+     * @allow (get, list, update, delete) User with matching userId can access and modify their profile.
+     * @deny (create) User cannot create a profile with a userId that does not match their auth.uid.
+     * @deny (update, delete) User cannot modify a profile that does not belong to them.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+          return isOwner(userId) && resource != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Grants public read access to Krishna stories.
+     * @path /stories/{storyId}
+     * @allow (get, list) Any user can read stories.
+     * @deny (create, update, delete) No user can create, update, or delete stories.
+     * @principle Allows open read access to public content.
+     */
+    match /stories/{storyId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Grants access to user-specific story progress.
+     * @path /users/{userId}/storyProgress/{storyId}
+     * @allow (get, list, create, update, delete) User with matching userId can access and modify their story progress.
+     * @deny (create, update, delete) User cannot modify story progress that does not belong to them.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/storyProgress/{storyId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+          return isOwner(userId) && resource != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Grants public read access to events.
+     * @path /events/{eventId}
+     * @allow (get, list) Any user can read events.
+     * @deny (create, update, delete) No user can create, update, or delete events.
+     * @principle Allows open read access to public content.
+     */
+    match /events/{eventId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Grants access to event registrations for specific events and users.
+     * @path /eventRegistrations/{eventId}/participants/{userId}
+     * @allow (create) User with matching userId can register for an event.
+     * @allow (get, list, update, delete) User with matching userId can access and modify their registration.
+     * @deny (create, update, delete) User cannot modify a registration that does not belong to them.
+     * @principle Enforces document ownership for writes.
+     */
+    match /eventRegistrations/{eventId}/participants/{userId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+          return isOwner(userId) && resource != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if false; // Registration collection is event-based, not user-listable.
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Grants public read access to games.
+     * @path /games/{gameId}
+     * @allow (get, list) Any user can read games.
+     * @deny (create, update, delete) No user can create, update, or delete games.
+     * @principle Allows open read access to public content.
+     */
+    match /games/{gameId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Grants access to user-specific game scores.
+     * @path /users/{userId}/gameScores/{gameId}
+     * @allow (get, list, create, update, delete) User with matching userId can access and modify their game scores.
+     * @deny (create, update, delete) User cannot modify game scores that do not belong to them.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/gameScores/{gameId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+          return isOwner(userId) && resource != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Grants access to leaderboard entries for specific games and users.
+     * @path /leaderboard/{gameId}/entries/{userId}
+     * @allow (get, list, create, update, delete) User with matching userId can access and modify their leaderboard entries.
+     * @deny (create, update, delete) User cannot modify leaderboard entries that do not belong to them.
+     * @principle Enforces document ownership for writes.
+     */
+    match /leaderboard/{gameId}/entries/{userId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+          return isOwner(userId) && resource != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if true; // Allowing listing to populate the leaderboard.
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Grants public read access to learning content.
+     * @path /learningContent/{contentId}
+     * @allow (get, list) Any user can read learning content.
+     * @deny (create, update, delete) No user can create, update, or delete learning content.
+     * @principle Allows open read access to public content.
+     */
+    match /learningContent/{contentId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Grants access to user-specific learning progress.
+     * @path /users/{userId}/learningProgress/{contentId}
+     * @allow (get, list, create, update, delete) User with matching userId can access and modify their learning progress.
+     * @deny (create, update, delete) User cannot modify learning progress that does not belong to them.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/learningProgress/{contentId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+          return isOwner(userId) && resource != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Grants public read access to galleries.
+     * @path /galleries/{galleryId}
+     * @allow (get, list) Any user can read galleries.
+     * @deny (create, update, delete) No user can create, update, or delete galleries.
+     * @principle Allows open read access to public content.
+     */
+    match /galleries/{galleryId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Grants access to photo details.
+     * @path /photos/{photoId}
+     * // CRITICAL: Cannot implement owner-only writes. The 'Photo' entity is missing an 'ownerId' or 'authorId' field.
+     */
+    match /photos/{photoId} {
+        allow get, list: if true; //Open reads for all users, including non-authenticated users.
+        allow create, update, delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+    }
+
+    /**
+     * @description Grants access to contact form submissions. Only admins can access this data.
+     * @path /contacts/{contactId}
+     * @allow (get, list, create, update, delete) Only admins can access and modify contact form submissions.
+     * @deny (get, list, create, update, delete) Non-admins cannot access contact form submissions.
+     * @principle Restricts access to admin users.
+     */
+    match /contacts/{contactId} {
+        function isAdmin() {
+            return get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'superadmin'
+            || get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'editor';
+        }
+
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    /**
+     * @description Grants access to class registration information. Only admins can access this data.
+     * @path /classRegistrations/{registrationId}
+     * @allow (get, list, create, update, delete) Only admins can access and modify class registration information.
+     * @deny (get, list, create, update, delete) Non-admins cannot access class registration information.
+     * @principle Restricts access to admin users.
+     */
+    match /classRegistrations/{registrationId} {
+      function isAdmin() {
+            return get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'superadmin'
+            || get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'editor';
+        }
+
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    /**
+     * @description Grants access to admin user profiles.
+     * @path /admins/{adminId}
+     * @allow (get, list, create, update, delete) Only admins can access and modify admin user profiles.
+     * @deny (get, list, create, update, delete) Non-admins cannot access admin user profiles.
+     * @principle Restricts access to admin users.
+     */
+    match /admins/{adminId} {
+        function isAdmin() {
+            return get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'superadmin'
+            || get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'editor';
+        }
+        function isSelf(adminId) {
+            return request.auth.uid == adminId;
+        }
+
+      allow get: if isAdmin() || isSelf(adminId);
+      allow list: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}
