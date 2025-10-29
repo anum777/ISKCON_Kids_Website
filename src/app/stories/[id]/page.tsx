@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { use } from 'react';
 
 const stories = {
   '1': {
@@ -48,7 +49,7 @@ type StoryParams = {
 };
 
 export default function StoryDetailPage({ params }: StoryParams) {
-  const story = stories[params.id];
+  const story = stories[use(params).id];
 
   if (!story) {
     return (

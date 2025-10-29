@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Calendar, Clock, MapPin, User } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { use } from 'react';
 
 const events = {
   '1': {
@@ -59,7 +60,7 @@ type EventParams = {
 };
 
 export default function EventDetailPage({ params }: EventParams) {
-  const event = events[params.id];
+  const event = events[use(params).id];
 
   if (!event) {
     return (
