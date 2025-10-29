@@ -95,6 +95,30 @@
       "description": "Children sitting in a circle for a workshop.",
       "imageUrl": "https://images.unsplash.com/photo-1544772711-57da9c7368fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxraWRzJTIwd29ya3Nob3B8ZW58MHx8fHwxNzYxNzU2MzAyfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "kids workshop"
+    },
+    {
+      "id": "jigsaw-puzzle-1",
+      "description": "Krishna playing his flute by the river.",
+      "imageUrl": "https://images.unsplash.com/photo-1676807447421-952b5e053904?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxLcmlzaG5hJTIwZmx1dGV8ZW58MHx8fHwxNzYxNzU3OTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Krishna flute"
+    },
+    {
+      "id": "guess-god-krishna",
+      "description": "An image of Lord Krishna.",
+      "imageUrl": "https://images.unsplash.com/photo-1625580916836-1badf2c15b32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxMb3JkJTIwS3Jpc2huYXxlbnwwfHx8fDE3NjE3NTc5NjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Lord Krishna"
+    },
+    {
+      "id": "guess-god-ganesha",
+      "description": "An image of Lord Ganesha.",
+      "imageUrl": "https://images.unsplash.com/photo-1567591370504-80142b28f1c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxMb3JkJTIwR2FuZXNoYXxlbnwwfHx8fDE3NjE3NTc5NjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Lord Ganesha"
+    },
+    {
+      "id": "guess-god-shiva",
+      "description": "An image of Lord Shiva.",
+      "imageUrl": "https://images.unsplash.com/photo-1558659616-7742131dcfbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxMb3JkJTIwU2hpdmF8ZW58MHx8fHwxNzYxNzU3OTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Lord Shiva"
     }
   ]
 }

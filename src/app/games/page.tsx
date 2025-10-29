@@ -1,6 +1,6 @@
 
 import { Card, CardContent } from '@/components/ui/card';
-import { Gamepad2, Lightbulb, Palette, Sparkles, Heart, Puzzle } from 'lucide-react';
+import { Gamepad2, Lightbulb, Sparkles, Heart, Puzzle } from 'lucide-react';
 import Link from 'next/link';
 
 const games = [
@@ -10,29 +10,23 @@ const games = [
         description: 'Test your knowledge about Krishna\'s life and teachings.',
         href: '/games/krishna-quiz',
     },
-     {
-        icon: <Palette className="h-10 w-10 text-primary" />,
-        title: 'Color Krishna',
-        description: 'Unleash your creativity and color beautiful scenes.',
-        href: '#',
-    },
-     {
+    {
         icon: <Sparkles className="h-10 w-10 text-primary" />,
         title: 'Guess the God',
         description: 'Identify different gods and goddesses from clues.',
-        href: '#',
+        href: '/games/guess-the-god',
     },
-     {
+    {
         icon: <Heart className="h-10 w-10 text-primary" />,
         title: 'Memory Match',
         description: 'Match pairs of divine symbols and characters.',
         href: '/games/memory-match',
     },
-     {
+    {
         icon: <Puzzle className="h-10 w-10 text-primary" />,
         title: 'Jigsaw Puzzles',
         description: 'Solve beautiful puzzles of Krishna\'s pastimes.',
-        href: '#',
+        href: '/games/jigsaw-puzzle',
     },
 ];
 
@@ -56,9 +50,9 @@ export default function GamesPage() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {games.map((game) => (
-              <Link key={game.title} href={game.href}>
+              <Link key={game.title} href={game.href} className="flex">
                 <Card
-                  className="group flex flex-col items-center justify-center p-8 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full"
+                  className="group flex flex-col items-center justify-center p-8 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full w-full"
                 >
                     <div className="mb-6 rounded-full bg-primary/20 p-4 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                       {game.icon}

@@ -249,22 +249,30 @@ export default function Home() {
               Fun & Games
             </h2>
             <div className="grid w-full grid-cols-2 gap-4">
-                <Card className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-primary/10">
-                    <Lightbulb className="mb-2 h-8 w-8 text-primary" />
-                    <h4 className="font-bold">Krishna Quiz</h4>
-                </Card>
-                 <Card className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-primary/10">
-                    <Palette className="mb-2 h-8 w-8 text-primary" />
-                    <h4 className="font-bold">Color Krishna</h4>
-                </Card>
-                 <Card className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-primary/10">
-                    <Sparkles className="mb-2 h-8 w-8 text-primary" />
-                    <h4 className="font-bold">Guess the God</h4>
-                </Card>
-                 <Card className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-primary/10">
-                    <Heart className="mb-2 h-8 w-8 text-primary" />
-                    <h4 className="font-bold">Memory Match</h4>
-                </Card>
+                <Link href="/games/krishna-quiz" className="block">
+                    <Card className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-primary/10 h-full">
+                        <Lightbulb className="mb-2 h-8 w-8 text-primary" />
+                        <h4 className="font-bold">Krishna Quiz</h4>
+                    </Card>
+                </Link>
+                 <Link href="/games/guess-the-god" className="block">
+                    <Card className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-primary/10 h-full">
+                        <Sparkles className="mb-2 h-8 w-8 text-primary" />
+                        <h4 className="font-bold">Guess the God</h4>
+                    </Card>
+                </Link>
+                 <Link href="/games/memory-match" className="block">
+                    <Card className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-primary/10 h-full">
+                        <Heart className="mb-2 h-8 w-8 text-primary" />
+                        <h4 className="font-bold">Memory Match</h4>
+                    </Card>
+                </Link>
+                 <Link href="/games/jigsaw-puzzle" className="block">
+                     <Card className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-primary/10 h-full">
+                        <Puzzle className="mb-2 h-8 w-8 text-primary" />
+                        <h4 className="font-bold">Jigsaw Puzzles</h4>
+                    </Card>
+                </Link>
             </div>
           </div>
         </div>
