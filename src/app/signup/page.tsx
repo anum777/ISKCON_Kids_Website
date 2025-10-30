@@ -20,6 +20,7 @@ import { doc } from 'firebase/firestore';
 import { useFirestore, useUser } from '@/firebase';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { sendEmailVerification } from 'firebase/auth';
 
 export default function SignupPage() {
   const signupArt = PlaceHolderImages.find((img) => img.id === 'signup-art');
@@ -34,9 +35,11 @@ export default function SignupPage() {
   const [parentName, setParentName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isVerificationSent, setIsVerificationSent] = useState(false);
 
   useEffect(() => {
-    if (user) {
+    if (user && !isVerificationSent) {
+      // Create user profile in Firestore
       const userRef = doc(firestore, 'users', user.uid);
       const userData = {
         id: user.uid,
@@ -49,9 +52,19 @@ export default function SignupPage() {
         profileImage: user.photoURL || '',
       };
       setDocumentNonBlocking(userRef, userData, { merge: true });
+
+      // Send verification email
+      sendEmailVerification(user).then(() => {
+        setIsVerificationSent(true);
+        toast({
+          title: 'Verification Email Sent',
+          description: 'Please check your inbox to verify your email address.',
+        });
+      });
+
       router.push('/');
     }
-  }, [user, router, firestore, childName, age, parentName]);
+  }, [user, router, firestore, childName, age, parentName, isVerificationSent, toast]);
 
   const handleSignUp = () => {
     initiateEmailSignUp(auth, email, password);
